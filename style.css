@@ -1,58 +1,237 @@
-*{
-    margin:0;
-    padding:0;
-}
-body{
-    background-color: rgb(44, 150, 150);
+/* RESET DEFAULTS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  body {
+    height: 100vh;
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    animation: bgShift 10s infinite alternate;
+    color: white;
+  }
+  
+  @keyframes bgShift {
+    0% {
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    }
+    100% {
+      background: linear-gradient(135deg, #2c5364, #203a43, #0f2027);
+    }
+  }
+  
+  main {
     text-align: center;
-}
-.container{
-    height:70vh;
+  }
+  
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    text-shadow: 0 0 10px #00f0ff;
+    animation: glowTitle 2s ease-in-out infinite alternate;
+  }
+  
+  @keyframes glowTitle {
+    from {
+      text-shadow: 0 0 5px #00f0ff, 0 0 10px #00f0ff;
+    }
+    to {
+      text-shadow: 0 0 20px #00f0ff, 0 0 40px #00f0ff;
+    }
+  }
+  
+  .container {
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
-}
-.game{
-    height:60vmin;
-    width: 60vmin;
+    margin-bottom: 20px;
+  }
+  
+  .game {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    gap: 15px;
+  }
+  
+  .box {
+    width: 100px;
+    height: 100px;
+    font-size: 2.5rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 15px;
+    background: linear-gradient(145deg, #1e1e2f, #2c2c4f);
+    color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+  }
+  
+  .box:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 15px #00f0ff;
+  }
+  
+  .box:active {
+    transform: scale(0.96);
+  }
+  
+  /* When clicked and disabled */
+  .box:disabled {
+    cursor: default;
+    opacity: 0.9;
+    animation: popSymbol 0.3s ease-in-out;
+  }
+  
+  /* Different color for X and O */
+  .box:disabled:after {
+    content: attr(data-symbol);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    font-weight: bold;
+    animation: fadeIn 0.3s ease-in;
+  }
+  
+  .box:disabled:after {
+    color: white;
+  }
+  
+  .box:disabled {
+    color: white;
+  }
+  
+  /* Specific color animation based on content */
+  .box:disabled:has(:not(:empty)):after,
+  .box:disabled:after {
+    color: inherit;
+  }
+  
+  .box:disabled:has(:not(:empty)) {
+    animation: glowSymbol 1s ease-in-out infinite alternate;
+  }
+  
+  @keyframes popSymbol {
+    0% {
+      transform: scale(0.5);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.5) translate(-50%, -50%);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translate(-50%, -50%);
+    }
+  }
+  
+  @keyframes glowSymbol {
+    from {
+      text-shadow: 0 0 5px #00ffe1;
+    }
+    to {
+      text-shadow: 0 0 20px #00ffe1, 0 0 40px #00ffe1;
+    }
+  }
+  
+  /* Style based on value using pure CSS (no JS change needed!) */
+  .box:disabled {
+    color: white;
+  }
+  
+  .box:disabled:contains("O") {
+    color: #00ffe1;
+    text-shadow: 0 0 10px #00ffe1;
+  }
+  
+  .box:disabled:contains("X") {
+    color: #ff2a6d;
+    text-shadow: 0 0 10px #ff2a6d;
+  }
+  
+  /* Fallback for browsers that don't support :contains */
+  .box:disabled {
+    color: white;
+  }
+  
+  /* RESET & NEW GAME BUTTON */
+  #reset-btn,
+  #new-btn {
+    margin-top: 15px;
+    padding: 10px 25px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #ff416c, #ff4b2b);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  #reset-btn:hover,
+  #new-btn:hover {
+    background: linear-gradient(90deg, #ff4b2b, #ff416c);
+    transform: scale(1.05);
+  }
+  
+  /* WINNER MESSAGE */
+  .msg-container {
+    position: absolute;
+    top: 20px;
+    background: linear-gradient(135deg, #ff4e50, #f9d423);
+    padding: 20px 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.5);
+    z-index: 100;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    gap: 1.5vmin;
-}
-.box{
-    height: 18vmin;
-    width: 18vmin;
-    border-radius: 2rem;
-    border: none;
-    box-shadow: 0 0 1rem rgba(0, 0, 0, 1);
-    font-size: 8vmin;
-    color: rgb(193, 43, 103);
-}
-#reset-btn{
-    padding: 1rem;
-    font-size: 1.25rem;
-    background-color: brown;
-    border-radius: 1rem;
-    border: none;
-}
-#new-btn{
-    padding: 1rem;
-    font-size: 1.25rem;
-    background-color: brown;
-    border-radius: 1rem;
-    border: none;
-
-}
-#msg{
-    color: rgb(193, 43, 103) ;
-    font-size: 5vmin;
-}
-.msg-container{
-  height: 20vmin;
-}
-.hide{
+    transition: all 0.5s ease;
+    opacity: 0;
+    transform: translateY(-200%);
+  }
+  
+  .msg-container:not(.hide) {
+    opacity: 1;
+    transform: translateY(0);
+    animation: slideDown 0.6s ease-out forwards;
+  }
+  
+  @keyframes slideDown {
+    from {
+      transform: translateY(-200%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+  
+  #msg {
+    font-size: 1.5rem;
+    color: #000;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  /* Hide helper class */
+  .hide {
     display: none;
-}
+  }
+  
